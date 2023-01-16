@@ -24,10 +24,11 @@ Features
 
 API  features
 
--	Get All the pledges
--	Get All the projects
+-	Information on all the pledges
+-	Information on all the projects
 -	Find user information and details on their bio
 -	Login URL for all new users to login 
+- Create User account
 
 ## Database Schema
 
