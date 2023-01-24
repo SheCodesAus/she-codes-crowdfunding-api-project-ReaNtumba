@@ -6,10 +6,9 @@ The name of my crowdfunding site is The Honeymooners. The honeymooners is a hone
 
 ![img](images/Yellow%20and%20Blue%20Beach%20Resort%20Logo.png)
 
-
 ## Purpose
 
-Where newlyweds graciously ask their friends and family to assist in saving for a trip to the their dream destination. 
+A crowdfunding site where newlyweds graciously ask their friends, family and generous pledgers to assist in saving for a honeymoon to the their dream destination. 
 
 
 ## Key Features
@@ -17,9 +16,9 @@ Where newlyweds graciously ask their friends and family to assist in saving for 
 Features
 
 - Create a user account
+- To RSVP to means you make a pledge and to decline is if don’t want to RSVP to the event
 - Delete user account and pledge
-- RSVP or decline for the wedding
-- Ability to pledge money or assistance to the happy couple
+- Ability to pledge money to the couple's honeymoon
 - Ability to track the number of pledges and who they came from
 
 API  features
@@ -28,7 +27,24 @@ API  features
 -	Information on all the projects
 -	Find user information and details on their bio
 -	Login URL for all new users to login 
-- Create User account
+-  Create User account
+
+Additional feature
+
+-	If you want to invite a guest and them leaving a note via the invitation 
+-	User being able to like projects 
+
+
+| Endpoint URL | Action         | HTTP Method | Authorisation     |
+| ------------ | -------------- | ----------- | ----------------- |
+| /users/      | List all users | GET         | Must be logged in |
+| /users/      | Create user    | POST        | N/A               |
+| /users/      | Get user info  | GET         | Must be logged in |
+| /users/      |Delete user info| Delete      | Must be logged in |
+| /users/      | Update existing instance|PUT | Must be logged in |
+| /project/    | Create project | POST        | Must be logged in |
+| /project/    | Create project | GET         | Must be logged in |
+| 
 
 ## Database Schema
 

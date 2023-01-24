@@ -17,7 +17,8 @@ class CustomUserList(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors) #ADD THE ERROR CODE YOURSELF 404, 201 ETC
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) #ADD THE ERROR CODE YOURSELF 404, 201 ETC
+
 
     
 class CustomUserDetail(APIView):
@@ -25,7 +26,7 @@ class CustomUserDetail(APIView):
         try:
             return CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
-            raise Http404 #his is raised when the user doesn't exist, known as a try-catch
+            raise Http404 #this is raised when the user doesn't exist, known as a try-catch
 
     def get(self, request, pk):
         user = self.get_object(pk)

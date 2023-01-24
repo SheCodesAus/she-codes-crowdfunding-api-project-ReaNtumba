@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from .models import Project, Pledge
 from .serializers import ProjectSerializer,ProjectDetailsSerializer, PledgeSerializer
 from django.http import Http404
-from rest_framework import status, generics
+from rest_framework import status, generics, permissions
+from .permissions import IsOwnerOrReadOnly
 
 class ProjectList(APIView): #project list is where you get all the projects
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         projects = Project.objects.all() #we are using the GET requests as REST verb
         serializer = ProjectSerializer(projects, many=True) #we say many=true because it is a list of projects, many
@@ -25,12 +27,34 @@ class ProjectList(APIView): #project list is where you get all the projects
             )
 
 class ProjectDetail(APIView):
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
+
     def get_object(self, pk):
-        try: #catches errors as they occur in your code
-            return Project.objects.get(pk=pk) #Try return project
+        try:#catches errors as they occur in your code
+            project = Project.objects.get(pk=pk)
+            self.check_object_permissions(self.request, project)
+            return project #Try return project
         except Project.DoesNotExist: #if the are exceptions
             raise Http404 #raise this http error
+            #logic is the person allowed access? do they have permssions
+
+    def put(self, request, pk):
+        project = self.get_object(pk)
+        data = request.data
+        serializer = ProjectDetailsSerializer(
+            instance=project,
+            data=data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         
+
+        #you need to come in and update the code here for when it is NOT valid like the views above
     def get(self, request, pk):
         project = self.get_object(pk)
         serializer = ProjectDetailsSerializer(project) #project serializer turns the project into json
