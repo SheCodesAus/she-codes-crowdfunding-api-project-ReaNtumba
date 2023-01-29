@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
+from django.utils import timezone
 
 class CustomUserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -8,7 +9,7 @@ class CustomUserSerializer(serializers.Serializer):
     password = serializers.CharField(write_only = True) 
     bio = serializers.CharField() #create users bio
     image = serializers.URLField()
-    date_joined = serializers.DateTimeField()
+    date_joined = serializers.DateTimeField(default=timezone.now)
     
     
     def create(self, validated_data):

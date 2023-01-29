@@ -25,6 +25,10 @@ class ProjectList(APIView): #project list is where you get all the projects
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
             )
+            
+def __str__(self):
+    return str(self.name)   
+
 
 class ProjectDetail(APIView):
     permission_classes = [
@@ -39,7 +43,7 @@ class ProjectDetail(APIView):
             return project #Try return project
         except Project.DoesNotExist: #if the are exceptions
             raise Http404 #raise this http error
-            #logic is the person allowed access? do they have permssions
+            #logic is the person allowed access? do they have permissions
 
     def put(self, request, pk):
         project = self.get_object(pk)
@@ -53,12 +57,16 @@ class ProjectDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         
-
         #you need to come in and update the code here for when it is NOT valid like the views above
     def get(self, request, pk):
         project = self.get_object(pk)
         serializer = ProjectDetailsSerializer(project) #project serializer turns the project into json
         return Response(serializer.data)
+
+    def delete(self, request, pk):
+        project = self.get_object(pk)
+        project.delete()
+        return Response (status=status.HTTP_204_NO_CONTENT)
 
 class PledgeList(generics.ListCreateAPIView): #this is a generic get and post, you let the system know the
     queryset = Pledge.objects.all()
@@ -66,6 +74,12 @@ class PledgeList(generics.ListCreateAPIView): #this is a generic get and post, y
 
     def perform_create(self, serializer):
         serializer.save(supporter=self.request.user)
+
+    def delete(self, request, pk):
+        project = self.get_object(pk)
+        project.delete()
+        return Response (status=status.HTTP_204_NO_CONTENT)
+
     # def get(self, request): #If you want pledges only for specific projects you can modify here and include the pk to go to specific projects not all
     #     pledges = Pledge.objects.all()
     #     serializer = PledgeSerializer(pledges, many=True)
